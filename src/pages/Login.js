@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import {DropdownButton, Dropdown} from 'react-bootstrap'
+import { DropdownButton, Dropdown } from 'react-bootstrap'
 
 // signup : userid, username, email, password
 // login: userid, password 
@@ -28,7 +28,7 @@ function Login() {
                     {
                         showSignup &&
                         <>
-                         <div className="input-group">
+                            <div className="input-group">
                                 <input type="text" className='form-control m-1' placeholder="Username" />
                             </div>
                             <div className="input-group">
@@ -36,12 +36,12 @@ function Login() {
                             </div>
                             <div className="d-flex justify-content-between m-1">
                                 <span className='my-1'>User Type</span>
-                                <DropdownButton 
-                                align="end"
-                                title={userType}
-                                id="userType"
-                                variant="light"
-                                onSelect={handleSelect}
+                                <DropdownButton
+                                    align="end"
+                                    title={userType}
+                                    id="userType"
+                                    variant="light"
+                                    onSelect={handleSelect}
                                 >
                                     <Dropdown.Item eventKey="CUSTOMER">CUSTOMER</Dropdown.Item>
                                     <Dropdown.Item eventKey="ENGINEER">ENGINEER</Dropdown.Item>
@@ -49,7 +49,7 @@ function Login() {
                                 </DropdownButton>
 
                             </div>
-                           
+
 
                         </>
                     }
@@ -66,7 +66,7 @@ function Login() {
 
                     </div>
 
-                    
+
 
                 </form>
 

@@ -1,4 +1,9 @@
+import {BrowserRouter as Router, Routes, Route, BrowserRouter} from 'react-router-dom'
 import Login from './pages/Login';
+import Admin from './pages/Admin';
+import Customer from './pages/Customer';
+import Engineer from './pages/Engineer';
+import NotFound from './pages/NotFound'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import './App.css';
@@ -16,10 +21,17 @@ import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <Login />
-    
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/engineer" element={<Engineer />} />
+        <Route path="/customer" element={<Customer />} />
+        <Route path="/*" element={<NotFound />} />
+
+        
+      </Routes>
+    </Router>
   );
 }
 

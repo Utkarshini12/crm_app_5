@@ -1,12 +1,53 @@
 import { useState } from 'react';
 import { DropdownButton, Dropdown } from 'react-bootstrap'
+import { userSignin } from '../api/auth'
 
 // signup : userid, username, email, password
 // login: userid, password 
+
+/*
+POST API 
+1. Grab the data 
+2. Store the data 
+3. Call the api */
 function Login() {
 
     const [showSignup, setShowSignup] = useState(false);
     const [userType, setUserType] = useState("CUSTOMER");
+    const [userId, setUserId] = useState("");
+    const [password, setPassword] = useState("");
+
+
+    const updateSignupData = (e) => {
+        if (e.target.id === "userid") {
+            setUserId(e.target.value)
+        } else if (e.target.id === "password") {
+            setPassword(e.target.value)
+        }
+
+    }
+
+    const signupFn = () => {
+        console.log("Sign up button triggered")
+    }
+
+    const loginFn = (e) => {
+        e.preventDefault();
+
+        const data = {
+            userId: userId,
+            password: password
+        }
+
+        userSignin(data).then((response) => {
+            console.log(response)
+        }).catch((error)=> {
+            console.log(error)
+        })
+
+    }
+
+
 
 
     const toggleSignup = () => {
@@ -19,11 +60,11 @@ function Login() {
     return (
         <div className='bg-info d-flex justify-content-center align-items-center vh-100 '>
             <div className="card p-3 rounded-4 shadow-lg" style={{ width: 20 + 'rem' }}>
-                <h4 className='text-center text-info'>{showSignup ? "Sign Up" : "Log In"}</h4>
+                <h4 className='text-center text-info'>{showSignup ? "Sign Up" : "Sign In"}</h4>
 
-                <form>
+                <form onSubmit={showSignup ? signupFn : loginFn}>
                     <div className="input-group">
-                        <input type="text" className='form-control m-1' placeholder="User Id" />
+                        <input type="text" className='form-control m-1' placeholder="User Id" value={userId} onChange={updateSignupData} id="userid" />
                     </div>
                     {
                         showSignup &&
@@ -54,15 +95,15 @@ function Login() {
                         </>
                     }
                     <div className="input-group">
-                        <input type="password" className='form-control m-1' placeholder="Password" />
+                        <input type="password" className='form-control m-1' placeholder="Password" id="password" value={password} onChange={updateSignupData} />
                     </div>
 
                     <div className="input-group">
-                        <input type="submit" className='btn btn-info fw-bolder form-control m-1 text-white' value={showSignup ? "Sign Up" : "Log In "} />
+                        <input type="submit" className='btn btn-info fw-bolder form-control m-1 text-white' value={showSignup ? "Sign Up" : "Sign In "} />
                     </div>
 
                     <div className="m-1 text-center text-primary" onClick={toggleSignup}>
-                        {showSignup ? "Already have an account? Login" : "Don't have an account? Sign Up"}
+                        {showSignup ? "Already have an account? Signin" : "Don't have an account? Sign Up"}
 
                     </div>
 

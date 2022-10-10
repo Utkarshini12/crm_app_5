@@ -1,4 +1,5 @@
-import {BrowserRouter as Router, Routes, Route, BrowserRouter} from 'react-router-dom'
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
+
 import Login from './pages/Login';
 import Admin from './pages/Admin';
 import Customer from './pages/Customer';
@@ -6,9 +7,16 @@ import Engineer from './pages/Engineer';
 import NotFound from './pages/NotFound'; 
 import Unauth from './pages/Unauthorized';
 import RequireAuth from './components/RequireAuth';
+
+import '@coreui/coreui/dist/css/coreui.min.css';
+import '@coreui/coreui/dist/js/coreui.min.js';
+import 'react-circular-progressbar/dist/styles.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
+import "bootstrap-icons/font/bootstrap-icons.css";
+
 import './App.css';
+
 
 // 1st week : // LOGIN/ SIGNUP page -> for 3 types of users
 //  1. UI 2. API Integration 3. Final flow  
@@ -32,9 +40,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
       {/* Protected routes by require auth starts */}
-        <Route element={<RequireAuth allowedRoles={[ROLES.ADMIN]} />}>
+        {/* <Route element={<RequireAuth allowedRoles={[ROLES.ADMIN]} />}> */}
         <Route path="/admin" element={<Admin />} />
-        </Route>
+        {/* </Route> */}
         <Route element={<RequireAuth allowedRoles={[ROLES.ENGINEER]} />}>
         <Route path="/engineer" element={<Engineer />} />
         </Route>

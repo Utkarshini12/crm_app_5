@@ -1,13 +1,12 @@
 import MaterialTable from '@material-table/core';
+import Sidebar from '../components/Sidebar';
 
-
-const lookup = { true: "Available", false: "Unavailable" };
 
 const columns = [
   { title: "First Name", field: "firstName" },
   { title: "Last Name", field: "lastName" },
   { title: "Birth Year", field: "birthYear", type: "numeric" },
-  { title: "Availablity", field: "availability", lookup }
+  { title: "Availablity", field: "availability" }
 ];
 
 const data = [
@@ -17,7 +16,8 @@ const data = [
 
 function Admin() {
     return (
-        <div className="bg-primary vh-100  p-5">
+        <div className="bg-light vh-100">
+          <Sidebar />
            <MaterialTable title="Demo Title" columns={columns} data={data} />
         </div>
     )

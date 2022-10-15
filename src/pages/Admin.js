@@ -2,10 +2,19 @@ import { useEffect, useState } from 'react';
 import MaterialTable from '@material-table/core';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar'
 import { ExportCsv, ExportPdf } from '@material-table/exporters'
+import { Modal, Button } from 'react-bootstrap'
 
-import { fetchTicket } from '../api/tickets';
+import { fetchTicket, ticketUpdation } from '../api/tickets';
 
 import Sidebar from '../components/Sidebar';
+
+// put logic 
+/*
+1. Grab the curr ticket : ticket id , all the curr data along with it 
+2. Store the curr Ticket in a state -> display the curr ticket details in the modal 
+3. Grab the new updated values and store in a state
+4. Fetch the api with the new updated data 
+*/
 
 
 const columns = [
@@ -35,7 +44,15 @@ const userColumns = [
 
 function Admin() {
   const [ticketDetails, setTicketDetails] = useState([]);
-  const [ticketStatusCount, setTicketStatusCount] = useState({})
+  const [ticketStatusCount, setTicketStatusCount] = useState({});
+  const [ticketUpdationModal, setTicketUpdationModal] = useState(false);
+  const [selectedCurrTicket, setSelectedCurrTicket] = useState({})
+
+  const updateSelectedCurrTicket = (data) => setSelectedCurrTicket(data)
+
+  const openTicketUpdationModal = () => setTicketUpdationModal(true);
+  const closeTicketUpdationModal = () => setTicketUpdationModal(false);
+
 
   useEffect(() => {
     fetchTickets()
@@ -81,8 +98,51 @@ function Admin() {
 
 
   }
+  // Storing teh curr ticket details in a state
+  const editTicket= (ticketDetail) => {
+    const ticket = {
+      assignee: ticketDetail.assignee, 
+      description: ticketDetail.description, 
+      title: ticketDetail.title, 
+      id: ticketDetail.id, 
+      reporter: ticketDetail.reporter, 
+      status: ticketDetail.status, 
+      ticketPriority: ticketDetail.ticketPriority, 
+    }
+    console.log("selected ticket", ticketDetail);
+    setTicketUpdationModal(true)
+    setSelectedCurrTicket(ticket)
+  }
+// 3. grabbing teh new updated data and storing it in a state 
+  const onTicketUpdate = (e) => {
+    if(e.target.name === "ticketPriority")
+    selectedCurrTicket.ticketPriority = e.target.value
+    else if(e.target.name === "status") 
+    selectedCurrTicket.status = e.target.value
+    else if(e.target.name === "description") 
+    selectedCurrTicket.description = e.target.value
 
-  console.log("***", ticketStatusCount);
+
+    updateSelectedCurrTicket(Object.assign({}, selectedCurrTicket))
+
+    console.log(selectedCurrTicket);
+  }
+
+  //  4. Call the api with the new updated data 
+  const updateTicket = (e) => {
+    e.preventDefault();
+    ticketUpdation(selectedCurrTicket.id, selectedCurrTicket).then(function(response) {
+      console.log(response);
+      // closing the modal 
+      setTicketUpdationModal(false)
+      // fetching the tickets again to update the table and the widgets 
+      fetchTickets();
+    }).catch(function (error) {
+      console.log(error);
+    })
+
+  }
+
 
   return (
     <div className="bg-light vh-100%">
@@ -128,7 +188,7 @@ function Admin() {
             <hr />
             <div className="row mb-2 d-flex align-items-center">
               <div className="col text-warning mx-4 fw-bolder display-6">
-              {ticketStatusCount.progress}
+                {ticketStatusCount.progress}
               </div>
               <div className="col">
                 <div style={{ width: 40, height: 40 }}>
@@ -147,7 +207,7 @@ function Admin() {
             <hr />
             <div className="row mb-2 d-flex align-items-center">
               <div className="col text-success mx-4 fw-bolder display-6">
-              {ticketStatusCount.closed}
+                {ticketStatusCount.closed}
               </div>
               <div className="col">
                 <div style={{ width: 40, height: 40 }}>
@@ -166,7 +226,7 @@ function Admin() {
             <hr />
             <div className="row mb-2 d-flex align-items-center">
               <div className="col text-secondary mx-4 fw-bolder display-6">
-              {ticketStatusCount.blocked}
+                {ticketStatusCount.blocked}
               </div>
               <div className="col">
                 <div style={{ width: 40, height: 40 }}>
@@ -183,6 +243,8 @@ function Admin() {
       {/* Widgets end */}
       <div className="container">
         <MaterialTable
+        // 1. grabbing the specific ticket from the row 
+        onRowClick={(event, rowData)=> editTicket(rowData) }
           title="TICKET"
           columns={columns}
           data={ticketDetails}
@@ -206,6 +268,69 @@ function Admin() {
             }]
           }}
         />
+
+        <button onClick={openTicketUpdationModal}>ticket update</button>
+
+        {ticketUpdationModal ? (
+          <Modal
+            show={ticketUpdationModal}
+            onHide={closeTicketUpdationModal}
+            backdrop="static"
+            centered>
+            <Modal.Header closeButton>
+              <Modal.Title>Update Ticket</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              {/* submit the details and we will call the api  */}
+              <form onSubmit={updateTicket}>
+                <div className="p-1">
+                  <h5 className="card-subtitle mb-2 text-danger">User ID : {selectedCurrTicket.id} </h5>
+                </div>
+                <div className="input-group mb-2">
+                  {/* If equal labels needed , set height and width for labelSize */}
+                  <label className='label input-group-text label-md labelSize'>Title</label>
+                  <input type="text" disabled value={selectedCurrTicket.title} className='form-control' />
+                </div>
+
+                <div className="input-group mb-2">
+                  <label className='label input-group-text label-md'>Reporter</label>
+                  <input type="text" disabled value={selectedCurrTicket.reporter} className='form-control' />
+                </div>
+                <div className="input-group mb-2">
+                  <label className='label input-group-text label-md'>Assignee</label>
+                  <select className='form-control' name="assignee">
+                    <option>Utkarshini</option>
+                  </select>
+                </div>
+                {/* Onchange : grabbing teh new updates values from UI  */}
+                <div className="input-group mb-2">
+                  <label className='label input-group-text label-md'>Priority</label>
+                  <input type="number" value={selectedCurrTicket.ticketPriority} className='form-control' name="ticketPriority" onChange={onTicketUpdate} />
+                </div>
+                <div className="input-group mb-2">
+                  <label className='label input-group-text label-md'>Status</label>
+                  <select className='form-select' name="status" value={selectedCurrTicket.status}  onChange={onTicketUpdate}>
+                    <option value="OPEN">OPEN</option>
+                    <option value="IN_PROGRESS">IN_PROGRESS</option>
+                    <option value="CLOSED">CLOSED</option>
+                    <option value="BLOCKED">BLOCKED</option>
+
+                  </select>
+                </div>
+                <div className="input-group mb-2">
+                  <label className='label input-group-text label-md'>Description</label>
+                  <textarea type="text" value={selectedCurrTicket.description}  onChange={onTicketUpdate} className=' md-textarea form-control' rows="3" name="description" />
+                </div>
+
+                <div className="d-flex justify-content-end">
+                  <Button variant='secondary' className="m-1" onClick={() => closeTicketUpdationModal}>Cancel</Button>
+                  <Button variant='danger' className="m-1" type="submit">Update</Button>
+
+                </div>
+              </form>
+            </Modal.Body>
+          </Modal>
+        ) : null}
 
         <hr />
         <MaterialTable

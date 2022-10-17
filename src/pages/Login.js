@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { DropdownButton, Dropdown } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
 import { userSignin } from '../api/auth'
 
 // signup : userid, username, email, password
@@ -10,12 +11,21 @@ POST API
 1. Grab the data 
 2. Store the data 
 3. Call the api */
+
+/*
+POST API SIGNUP
+1. Grab the data : userid, username, email, usertype, password
+2. Store the data : username, email
+3. Call the api */
 function Login() {
 
     const [showSignup, setShowSignup] = useState(false);
     const [userType, setUserType] = useState("CUSTOMER");
     const [userId, setUserId] = useState("");
     const [password, setPassword] = useState("");
+    const [message, setMessage] = useState("");
+
+    const navigate = useNavigate();
 
 
     const updateSignupData = (e) => {
@@ -28,6 +38,10 @@ function Login() {
     }
 
     const signupFn = () => {
+        // prevent default 
+        // data : userid, name, email, password, usertype
+        // call teh api and pass data 
+        // Display the successful message 
         console.log("Sign up button triggered")
     }
 
@@ -41,24 +55,25 @@ function Login() {
 
         userSignin(data).then((response) => {
             // setItem(name, value)
-           localStorage.setItem("name", response.data.name);
-           localStorage.setItem("userId", response.data.userId);
-           localStorage.setItem("email", response.data.email);
-           localStorage.setItem("userTypes", response.data.userTypes);
-           localStorage.setItem("userStatus", response.data.userStatus);
-           localStorage.setItem("token", response.data.accessToken);
-           if(response.data.userTypes === "CUSTOMER") 
-                window.location.href = "/customer"
-            else if(response.data.userTypes === "ENGINEER")
-                window.location.href = "/engineer"
-            else if(response.data.userTypes === "ADMIN")
-                window.location.href = "/admin"
-            else 
-            window.location.href = "/"
+            localStorage.setItem("name", response.data.name);
+            localStorage.setItem("userId", response.data.userId);
+            localStorage.setItem("email", response.data.email);
+            localStorage.setItem("userTypes", response.data.userTypes);
+            localStorage.setItem("userStatus", response.data.userStatus);
+            localStorage.setItem("token", response.data.accessToken);
+            if (response.data.userTypes === "CUSTOMER")
+                navigate('/customer')
+            else if (response.data.userTypes === "ENGINEER")
+                navigate('/engineer')
+            else if (response.data.userTypes === "ADMIN")
+                navigate('/admin')
+            else
+                navigate("/")
 
 
         }).catch((error) => {
-            console.log(error)
+            console.log(error);
+            setMessage(error.response.data.message)
         })
 
     }
@@ -118,10 +133,11 @@ function Login() {
                         <input type="submit" className='btn btn-info fw-bolder form-control m-1 text-white' value={showSignup ? "Sign Up" : "Sign In "} />
                     </div>
 
-                    <div className="m-1 text-center text-primary" onClick={toggleSignup}>
+                    <div className="m-1 text-center text-primary clickable" onClick={toggleSignup}>
                         {showSignup ? "Already have an account? Signin" : "Don't have an account? Sign Up"}
 
                     </div>
+                    <div className="text-center text-danger">{message}</div>
 
 
 

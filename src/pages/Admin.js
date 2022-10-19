@@ -4,6 +4,8 @@ import { CircularProgressbar, buildStyles } from 'react-circular-progressbar'
 import { ExportCsv, ExportPdf } from '@material-table/exporters'
 import { Modal, Button } from 'react-bootstrap'
 
+
+import Widget from '../components/Widget';
 import { fetchTicket, ticketUpdation } from '../api/tickets';
 
 import Sidebar from '../components/Sidebar';
@@ -188,30 +190,9 @@ function Admin() {
       <div className="row ms-5 ps-5 mb-5">
 
         {/* w1 */}
-        <div className="col-xs-12 col-lg-3 col-md-6 my-1">
-          <div className="card shadow bg-primary bg-opacity-25 text-center" style={{ width: 15 + 'rem' }}>
-            <h5 className="card-subtitle my-2 fw-bolder text-primary"><i className='bi bi-envelope-open text-primary mx-2'></i>Open</h5>
-            <hr />
-            <div className="row mb-2 d-flex align-items-center">
-              <div className="col text-primary mx-4 fw-bolder display-6">
-                {ticketStatusCount.open}
-              </div>
-              <div className="col">
-                {/* Size of circular bar */}
-                <div style={{ width: 40, height: 40 }}>
-                  {/* How to use ? 
-                    Import from top
-                    value={the count of tickets}
-                    buildStyles({}) : a function that accepts obj. Obj takes css styles in key value format. Colors can be accepted in hex, rgpa, and text names
-                  */}
-                  <CircularProgressbar value={ticketStatusCount.open} styles={buildStyles({
-                    pathColor: "darkblue"
-                  })} />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        {/*  color, title, icon, ticketCount, pathColor  */}
+        <Widget color="primary" title="OPEN" icon="envelope-open" ticketCount={ticketStatusCount.open} pathColor="darkblue" />
+        
         {/* w2 */}
         <div className="col-xs-12 col-lg-3 col-md-6 my-1">
           <div className="card shadow bg-warning bg-opacity-25 text-center" style={{ width: 15 + 'rem' }}>

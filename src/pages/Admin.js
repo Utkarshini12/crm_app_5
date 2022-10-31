@@ -296,7 +296,7 @@ function Admin() {
               {/* submit the details and we will call the api  */}
               <form onSubmit={updateTicket}>
                 <div className="p-1">
-                  <h5 className="card-subtitle mb-2 text-danger">User ID : {selectedCurrTicket.id} </h5>
+                  <h5 className="card-subtitle mb-2 text-danger"> ID : {selectedCurrTicket.id} </h5>
                 </div>
                 <div className="input-group mb-2">
                   {/* If equal labels needed , set height and width for labelSize */}

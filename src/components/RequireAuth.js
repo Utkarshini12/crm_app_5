@@ -15,6 +15,8 @@ function RequireAuth({ allowedRoles }) {
                 : <Navigate to="/" state={{ from: location }} replace />
 
     )
+
+    // ? true : false ? true : false
 }
 
 export default RequireAuth;

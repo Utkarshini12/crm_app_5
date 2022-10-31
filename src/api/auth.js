@@ -6,7 +6,7 @@ const BASE_URL = "https://relevel-crm--backend.herokuapp.com"
 SIGNUP: 
 POST : api 
 url : /crm/api/v1/auth/signup
-data : userid, email, name, pw
+data : userid, email, name, pw, usertype
  */
 
 export async function userSignup(data) {

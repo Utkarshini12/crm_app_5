@@ -54,6 +54,7 @@ function Login() {
         }
 
         userSignin(data).then((response) => {
+            console.log(response);
             // setItem(name, value)
             localStorage.setItem("name", response.data.name);
             localStorage.setItem("userId", response.data.userId);

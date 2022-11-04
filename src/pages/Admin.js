@@ -13,9 +13,9 @@ import Sidebar from '../components/Sidebar';
 
 // TASKS : 
 /*
-Create a common dynamic component for widgets 
-// GET API for users : userid
-// Create a func getAllUsers() => fetch the api => staore the array of objects in state => userDetails
+Create a common dynamic component for widgets ->  done
+// 1. GET API for users : userid
+// 2. Create a func getAllUsers() => fetch the api => staore the array of objects in state => userDetails
 Pass the userdetails in material table 
 
 // PUT API dor users : userid, updated new data -> change of status 

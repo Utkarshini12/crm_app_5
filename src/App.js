@@ -43,12 +43,12 @@ function App() {
         <Route element={<RequireAuth allowedRoles={[ROLES.ADMIN]} />}>
         <Route path="/admin" element={<Admin />} />
         </Route>
-        {/* <Route element={<RequireAuth allowedRoles={[ROLES.ENGINEER]} />}> */}
+        <Route element={<RequireAuth allowedRoles={[ROLES.ENGINEER]} />}>
         <Route path="/engineer" element={<Engineer />} />
-        {/* </Route> */}
-        <Route element={<RequireAuth allowedRoles={[ROLES.CUSTOMER]}/>}>
-        <Route path="/customer" element={<Customer />} />
         </Route>
+        {/* <Route element={<RequireAuth allowedRoles={[ROLES.CUSTOMER]}/>}> */}
+        <Route path="/customer" element={<Customer />} />
+        {/* </Route> */}
       {/* Protected routes by require auth end */}
 
         <Route path="/*" element={<NotFound />} />

@@ -1,56 +1,48 @@
-import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import Login from './pages/Login';
-import Admin from './pages/Admin';
-import Customer from './pages/Customer';
-import Engineer from './pages/Engineer';
-import NotFound from './pages/NotFound'; 
-import Unauth from './pages/Unauthorized';
-import RequireAuth from './components/RequireAuth';
+import Login from "./pages/Login";
+import Admin from "./pages/Admin";
+import Customer from "./pages/Customer";
+import Engineer from "./pages/Engineer";
+import NotFound from "./pages/NotFound";
+import Unauth from "./pages/Unauthorized";
+import RequireAuth from "./components/RequireAuth";
 
-import '@coreui/coreui/dist/css/coreui.min.css';
-import '@coreui/coreui/dist/js/coreui.min.js';
-import 'react-circular-progressbar/dist/styles.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
+import "@coreui/coreui/dist/css/coreui.min.css";
+import "@coreui/coreui/dist/js/coreui.min.js";
+import "react-circular-progressbar/dist/styles.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
-import './App.css';
-
-
+import "./App.css";
 // 1st week : // LOGIN/ SIGNUP page -> for 3 types of users
-//  1. UI 2. API Integration 3. Final flow  
-
-// 3 types of users : 
-
-//  ADMIN : Log in , all tickets , all users -> give permisions to the user 
-
-//  ENGINEER : Sign up , login after approval , edit tickets that are assigned to them -> edit the status 
-
-// CUSTOMER : Sign up, log in, raise the ticket, edit the ticket status -> open/ close 
+//  1. UI 2. API Integration 3. Final flow
+// 3 types of users :
+//  ADMIN : Log in , all tickets , all users -> give permisions to the user
+//  ENGINEER : Sign up , login after approval , edit tickets that are assigned to them -> edit the status
+// CUSTOMER : Sign up, log in, raise the ticket, edit the ticket status -> open/ close
 const ROLES = {
-  'CUSTOMER': 'CUSTOMER', 
-  'ADMIN': 'ADMIN', 
-  'ENGINEER': 'ENGINEER'
-
-}
+  CUSTOMER: "CUSTOMER",
+  ADMIN: "ADMIN",
+  ENGINEER: "ENGINEER",
+};
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
-      {/* Protected routes by require auth starts */}
+        {/* Protected routes by require auth starts */}
         <Route element={<RequireAuth allowedRoles={[ROLES.ADMIN]} />}>
-        <Route path="/admin" element={<Admin />} />
+          <Route path="/admin" element={<Admin />} />
         </Route>
         <Route element={<RequireAuth allowedRoles={[ROLES.ENGINEER]} />}>
-        <Route path="/engineer" element={<Engineer />} />
+          <Route path="/engineer" element={<Engineer />} />
         </Route>
-        {/* <Route element={<RequireAuth allowedRoles={[ROLES.CUSTOMER]}/>}> */}
+        <Route element={<RequireAuth allowedRoles={[ROLES.CUSTOMER]}/>}>
         <Route path="/customer" element={<Customer />} />
-        {/* </Route> */}
-      {/* Protected routes by require auth end */}
-
+        </Route>
+        {/* Protected routes by require auth end */}
         <Route path="/*" element={<NotFound />} />
         <Route path="/unauthorized" element={<Unauth />} />
       </Routes>
@@ -59,3 +51,23 @@ function App() {
 }
 
 export default App;
+
+/*
+steps : 
+1. login 
+2. npm run build 
+3. npm install heroku
+4. git push 
+5. type heroku in command line
+6. it will craete main.js -> check node version
+7. create a new app on heroku
+
+*/
+/*login 
+connect with github 
+add a new site -> select the repo 
+Owners name:your name
+Branch to deploy: master is selected you can select the branch Base directory: this is optional field keep it as it is
+Build command :CI= npm run build
+Publish directory:build
+*/

@@ -3,21 +3,18 @@ import MaterialTable from "@material-table/core";
 import { ExportCsv, ExportPdf } from "@material-table/exporters";
 import { Modal, ModalHeader, Button } from "react-bootstrap";
 
-import { fetchTicket, ticketUpdation } from "../api/tickets";
-
 import Sidebar from "../components/Sidebar";
 import Widget from '../components/Widget'
+import { fetchTicket, ticketUpdation } from "../api/tickets";
 
 /*
 engineer signup -> contact admin to put them in approved state -> login 
 */
-
 /*
 1. grab data 
 2. store data 
 3. grab the updated data nd store in a state 
 4. fetch the update api 
-
 */
 
 const columns = [
@@ -51,7 +48,6 @@ const columns = [
             "BLOCKED": "BLOCKED"
         }
     },
-
 ]
 
 function Engineer() {
@@ -75,6 +71,7 @@ function Engineer() {
         (async () => {
             fetchTickets()
         })()
+         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     // get all tickets list 
     const fetchTickets = () => {
@@ -93,7 +90,6 @@ function Engineer() {
             closed: 0,
             blocked: 0
         }
-
         tickets.forEach((ticket) => {
             if (ticket.status === "OPEN")
                 data.open += 1
@@ -103,7 +99,6 @@ function Engineer() {
                 data.closed += 1
             else if (ticket.status === "BLOCKED")
                 data.blocked += 1
-
         })
 
         setTicketStatusCount(Object.assign({}, data))
@@ -140,12 +135,8 @@ function Engineer() {
         updateSelectedCurrTicket(Object.assign({}, selectedCurrTicket))
 
     }
-
-    console.log(selectedCurrTicket);
-
     // fetch put  api with updated details 
     const updateTicket = (e) => {
-
         e.preventDefault(); 
         ticketUpdation(selectedCurrTicket.id, selectedCurrTicket).then(function(res){
             setMessage("Ticket Updated Successfully!"); 
@@ -154,9 +145,6 @@ function Engineer() {
         }).catch(function(error){
             setMessage(error.response.data.message)
         })
-
-
-
     }
 
 
